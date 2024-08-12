@@ -35,3 +35,32 @@ from Country
 where LifeExpectancy >
 (select AVG(LifeExpectancy)
 FROM COUNTRY);
+
+
+/* -----------------------------------------------------------------------------------------------------  */
+/* Countries from selected continents whose Independece Year is even number and not null*/
+
+select Continent,Name,IndepYear
+from Country
+where IndepYear IN (
+select IndepYear 
+from Country
+where 
+IndepYear % 2 = 0 and IndepYear is not null and IndepYear >= 1900)
+ORDER BY IndepYear desc;
+
+/* -----------------------------------------------------------------------------------------------------  */
+/* Country with minimum LifeExpectancy from Countries of 
+selected continents whose Independece Year is even number and not null*/
+
+select A.Continent,A.Name,A.LifeExpectancy
+FROM (select Continent,Name,IndepYear,LifeExpectancy 
+from  country
+where IndepYear % 2 = 0 and IndepYear is not null and IndepYear >= 1900) AS A
+ORDER BY A.LifeExpectancy ASC LIMIT 1;
+
+
+SELECT Continent,Name, (Select ROUND(AVG(LifeExpectancy)) from country where IndepYear % 3= 0 and IndepYear is not null and IndepYear >= 1900) as Avg_LifeExpectancy
+from country
+where Continent IN ('Asia','Africa');
+
